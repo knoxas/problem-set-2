@@ -8,7 +8,7 @@ datasets="$HOME/data-sets"
 H3K4me3="$datasets/bed/encode.h3k4me3.hela.chr22.bed.gz"
 tfbs="$datasets/bed/encode.tfbs.chr22.bed.gz"
 
-answer_1=$(bedtools intersect -wo -a $tfbs -b $H3K4me3 | sort -k15nr | cut -f15 | head -n1)
+answer_1=$(bedtools intersect -wo -a $tfbs -b $H3K4me3 | awk '($4 == "CTCF")' | sort -k15nr | cut -f15 | head -n1)
 echo "answer-1: $answer_1"
 
 
@@ -27,7 +27,7 @@ echo "answer-2: $answer_2"
 # ctcf.hela.chr22.bg.gz.
 ctcf="$datasets/bedtools/ctcf.hela.chr22.bg.gz"
 
-answer_3=$(bedtools map -o mean -c 4 -a $tfbs -b $ctcf | sort -k5rn | head -n1 | awk 'BEGIN {FS="\t"} {print $3 - $2}')
+answer_3=$(bedtools map -o mean -c 4 -a $tfbs -b $ctcf | awk '($4 == "CTCF")' | sort -k5rn | head -n1 | awk 'BEGIN {FS="\t"} {print $3 - $2}')
 
 echo "answer-3: $answer_3"
 
